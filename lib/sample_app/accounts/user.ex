@@ -18,11 +18,10 @@ defmodule SampleApp.Accounts.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, @required_fields)
-    |> validate_required(@required_fields)
-    |> validate_required([:name, :email])
+    |> validate_required(@required_fields, message: "This field is required.")
     |> validate_length(:name, max: 50)
     |> validate_length(:email, max: 255)
-    |> validate_length(:password, min: 10, max: 72, message: [count_missing: "Must be at least 10 characters", count_overflowing: "Maximum 72 characters"])
+    |> validate_length(:password, min: 10, max: 72, message: "Must be between 10 to 72 characters")
     |> validate_format(:email, @valid_email_regex)
     |> validate_confirmation(:password, message: "Does not match password")
     |> update_change(:email, &String.downcase/1)

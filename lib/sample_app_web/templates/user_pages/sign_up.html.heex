@@ -1,23 +1,18 @@
 <div class="min-h-screen flex flex-col">
   <div class="min-h-screen flex flex-col">
-    <.nav />
-    <div class="flex flex-col flex-1 items-center gap-7">
-      <form
-        class="shadow-xl border-10 border-orange-500 mt-10 bg-white w-100 [&>input]:w-80 [&>input]:border [&>input]:border-black/50 flex flex-col items-center p-10 [&>input]:rounded-md gap-7 [&>input]:h-12 [&>input]:focus:outline-none [&>input]:focus:border-black [&>input]:placeholder:text-black/50 [&>input]:px-2 [&>input]:text-black"
-      >
-        <h1 class="primary-gradient text-center font-semibold text-2xl">
-          Sign up
-        </h1>
-        <input type="text" placeholder="Name" />
-        <input type="text" placeholder="Email" />
-        <input type="password" placeholder="Password" />
-        <input type="password" placeholder="Confirm password" />
-        <button
-          class="bg-linear-to-r from-orange-500 to-orange-600 rounded-full py-3 px-6 text-lg cursor-pointer shadow-xl"
-        >
+    <.nav login={true} current_user={@current_user}/>
+    <div class="flex flex-col flex-1 items-center gap-5">
+      <.form :let={f} for={@changeset} action={~p"/users"} class="mt-5 shadow-xl bg-white border-10 border-orange-500 w-100 [&_input]:w-80 [&_input]:bg-white [&_input]:border [&_input]:border-black/50 flex flex-col items-center p-10 [&_input]:rounded-md gap-3 [&_input]:h-12 [&_input]:focus:outline-none [&_input]:focus:border-black [&_input]:placeholder:text-black/50 [&_input]:px-2 [&_input]:text-black">
+        <h1 class="primary-gradient text-center font-semibold text-2xl">Sign up</h1>
+        <.input field={f[:name]} type="text" placeholder="Name" />
+        <.input field={f[:email]} type="email" placeholder="Email" />
+        <.input field={f[:password]} type="password" placeholder="Password" />
+        <.input field={f[:password_confirmation]} type="password" placeholder="Confirm password" />
+        <button class="bg-linear-to-r from-orange-500 to-orange-600 rounded-full py-3 px-6 text-lg cursor-pointer shadow-xl">
           Create account
         </button>
-      </form>
+        <.link href={~p"/login"} class="text-sky-400 mt-3 text-sm underline">Login</.link>
+      </.form>
     </div>
   </div>
 </div>

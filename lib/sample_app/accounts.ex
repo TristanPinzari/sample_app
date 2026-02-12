@@ -35,6 +35,7 @@ defmodule SampleApp.Accounts do
 
   """
   def get_user!(id), do: Repo.get!(User, id)
+  def get_user(id), do: Repo.get(User, id)
 
   @doc """
   Creates a user.
@@ -111,6 +112,5 @@ defmodule SampleApp.Accounts do
         Pbkdf2.no_user_verify()
         {:error, :not_found}
     end
-
   end
 end

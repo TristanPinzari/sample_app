@@ -8,6 +8,7 @@ defmodule SampleAppWeb.Router do
     plug :put_root_layout, html: {SampleAppWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug SampleAppWeb.AuthPlug
   end
 
   pipeline :api do
@@ -24,6 +25,10 @@ defmodule SampleAppWeb.Router do
     get "/contact", PageController, :contact
     get "/users/signUp", UserController, :sign_up
     post "/users/signUp", UserController, :create
+    get "/login", SessionController, :new
+    post "/login", SessionController, :create
+    delete "/logout", SessionController, :delete
+    resources "/users", UserController
   end
 
   # Other scopes may use custom stacks.

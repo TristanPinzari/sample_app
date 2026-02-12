@@ -1,4 +1,4 @@
-defmodule SampleAppWeb.PageHTML do
+defmodule SampleAppWeb.UserHTML do
   @moduledoc """
   This module contains pages rendered by PageController.
 
@@ -8,5 +8,5 @@ defmodule SampleAppWeb.PageHTML do
 
   use SampleAppWeb, :html
 
-  embed_templates "../templates/static_pages/*"
+  embed_templates "../templates/user_pages/*"
 end
