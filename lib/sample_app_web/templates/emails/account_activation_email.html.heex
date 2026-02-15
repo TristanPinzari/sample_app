@@ -1,0 +1,15 @@
+<div class="flex flex-col items-center p-10 gap-5">
+  <h1 class="text-3xl font-semibold">Sample App</h1>
+
+  <p>Hi {@user.name},</p>
+
+  <p>Welcome to the Sample App!</p>
+  <p>Click on the link below to activate your account:</p>
+
+  <.link
+    class="underline"
+    href={url(~p"/account_activations/#{@activation_token}/edit?email=#{@user.email}")}
+  >
+    Active account
+  </.link>
+</div>

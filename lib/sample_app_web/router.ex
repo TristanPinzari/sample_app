@@ -30,6 +30,18 @@ defmodule SampleAppWeb.Router do
     delete "/logout", SessionController, :delete
     resources "/users", UserController
     resources "/account_activations", AccountActivationController, only: [:edit]
+
+    if Mix.env() == :dev do
+      get "/preview_emails/:type", PreviewEmailController, :show
+    end
+  end
+
+  if Mix.env() == :dev do
+    scope "/" do
+      pipe_through :browser
+
+      forward "/sent_emails", Plug.Swoosh.MailboxPreview
+    end
   end
 
   # Other scopes may use custom stacks.

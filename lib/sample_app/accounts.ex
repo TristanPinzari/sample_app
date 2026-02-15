@@ -6,6 +6,7 @@ defmodule SampleApp.Accounts do
   import Ecto.Query, warn: false
   alias SampleApp.Repo
   alias SampleApp.Accounts.User
+  alias SampleApp.{Mailer, Email}
 
   @doc """
   Returns the list of users.
@@ -16,20 +17,36 @@ defmodule SampleApp.Accounts do
       [%User{}, ...]
 
   """
-  def list_users(params \\ %{}) do
+  def list_users(params \\ %{}, activated_users_only \\ true) do
     page = String.to_integer(params["page"] || "1")
     per_page = 10
     offset = (page - 1) * per_page
 
-    User
+    query = User
+    query =
+      if activated_users_only do
+        where(query, [u], u.activated == true)
+      else
+        query
+      end
+
+    query
     |> order_by(asc: :id)
     |> limit(^per_page)
     |> offset(^offset)
     |> Repo.all()
   end
 
-  def count_users do
-    Repo.aggregate(User, :count, :id)
+  def count_users(activated_users_only \\ true) do
+    query = User
+    query =
+      if activated_users_only do
+        where(query, [u], u.activated == true)
+      else
+        query
+      end
+
+    Repo.aggregate(query, :count, :id)
   end
 
   @doc """
@@ -143,5 +160,26 @@ defmodule SampleApp.Accounts do
         Pbkdf2.no_user_verify()
         {:error, :not_found}
     end
+  end
+
+  def activate_user(%User{activated: false} = user) do
+    user
+    |> User.token_changeset(%{
+      activated: true,
+      activated_at: DateTime.truncate(DateTime.utc_now(), :second)
+    })
+    |> Repo.update()
+  end
+
+  def activate_user(%User{activated: true}) do
+    {:error, :already_activated}
+  end
+
+  def send_user_activation_email(%User{activated: false} = user) do
+    activation_token = SampleApp.Token.gen_activation_token(user)
+
+    user
+    |> Email.account_activation_email(activation_token)
+    |> Mailer.deliver()
   end
 end

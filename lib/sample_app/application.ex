@@ -15,7 +15,8 @@ defmodule SampleApp.Application do
       # Start a worker by calling: SampleApp.Worker.start_link(arg)
       # {SampleApp.Worker, arg},
       # Start to serve requests, typically the last entry
-      SampleAppWeb.Endpoint
+      SampleAppWeb.Endpoint,
+      {Finch, name: Swoosh.Finch}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

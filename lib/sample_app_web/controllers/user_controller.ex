@@ -27,10 +27,16 @@ defmodule SampleAppWeb.UserController do
   def create(conn, %{"user" => user_params}) do
     case Accounts.create_user(user_params) do
       {:ok, user} ->
+        Accounts.send_user_activation_email(user)
+
         conn
-        |> SampleAppWeb.AuthPlug.login(user)
-        |> put_flash(:info, "Welcome to the Sample App!")
-        |> redirect(to: ~p"/users/#{user.id}")
+        |> put_flash(:info, "Please check your email to activate your account.")
+        |> redirect(to: ~p"/")
+
+      # conn
+      # |> SampleAppWeb.AuthPlug.login(user)
+      # |> put_flash(:info, "Welcome to the Sample App!")
+      # |> redirect(to: ~p"/users/#{user.id}")
 
       {:error, %Ecto.Changeset{} = changeset} ->
         conn
@@ -68,8 +74,10 @@ defmodule SampleAppWeb.UserController do
 
   def delete(conn, %{"id" => id}) do
     user = Accounts.get_user(id)
+
     if user do
       Accounts.delete_user(user)
+
       conn
       |> put_flash(:info, "User deleted")
       |> redirect(to: ~p"/users")

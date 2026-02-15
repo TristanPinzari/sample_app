@@ -1,0 +1,6 @@
+Hi <%= @user.name %>,
+
+Welcome to the Sample App!
+Click on the link below to activate your account:
+
+<%= url(~p"/account_activations/#{@activation_token}/edit?email=#{@user.email}") %>

@@ -69,4 +69,12 @@ defmodule SampleApp.Accounts.User do
         changeset
     end
   end
+
+  def token_changeset(user, attrs) do
+    user
+    |> cast(attrs, [
+      :activated,
+      :activated_at
+    ])
+  end
 end

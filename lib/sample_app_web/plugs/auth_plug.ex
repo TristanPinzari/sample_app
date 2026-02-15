@@ -75,6 +75,7 @@ defmodule SampleAppWeb.AuthPlug do
 
   def is_admin(conn, _opts) do
     user = conn.assigns.current_user
+
     if user && user.admin do
       conn
     else

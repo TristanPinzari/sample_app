@@ -43,7 +43,7 @@ defmodule SampleAppWeb do
       use Gettext, backend: SampleAppWeb.Gettext
 
       import Plug.Conn
-      import SampleAppWeb.AuthPlug, only: [logged_in_user: 2, correct_user: 2, is_admin:  2]
+      import SampleAppWeb.AuthPlug, only: [logged_in_user: 2, correct_user: 2, is_admin: 2]
 
       unquote(verified_routes())
     end
