@@ -18,7 +18,7 @@ defmodule SampleApp.Email do
 
     new()
     |> to({user.name, user.email})
-    |> from({"Sample App", "noreply@example.com"})
+    |> from({"Sample App", "tristanpinzari@gmail.com"})
     |> subject("Sample App - Account Activation")
     |> html_body(html_body_content)
     |> text_body(text_content)
