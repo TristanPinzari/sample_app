@@ -11,6 +11,8 @@ defmodule SampleApp.Accounts.User do
     field :email, :string
     field :password_hash, :string
     field :admin, :boolean, default: false
+    field :activated, :boolean, default: false
+    field :activated_at, :utc_datetime
     timestamps(type: :utc_datetime)
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true

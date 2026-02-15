@@ -29,6 +29,7 @@ defmodule SampleAppWeb.Router do
     post "/login", SessionController, :create
     delete "/logout", SessionController, :delete
     resources "/users", UserController
+    resources "/account_activations", AccountActivationController, only: [:edit]
   end
 
   # Other scopes may use custom stacks.

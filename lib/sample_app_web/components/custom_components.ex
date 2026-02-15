@@ -30,7 +30,8 @@ defmodule SampleAppWeb.CustomComponents do
             </summary>
 
             <div class="absolute left-[50%] translate-x-[-50%] mt-2 w-20 rounded-lg py-1 bg-main-bg border border-main-border flex flex-col [&_a]:text-center gap-1">
-              <.link href={~p"/users/#{@current_user.id}"}>Profile</.link> <.link>Settings</.link>
+              <.link href={~p"/users/#{@current_user.id}"}>Profile</.link>
+              <.link>Settings</.link>
               <.link href={~p"/logout"} method="delete">Log out</.link>
             </div>
           </details>
