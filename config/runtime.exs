@@ -56,13 +56,17 @@ if config_env() == :prod do
   config :sample_app, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
   config :sample_app, SampleAppWeb.Endpoint,
-    server: true,
-    url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 443],
-    http: [
-      ip: {0, 0, 0, 0},
-      port: String.to_integer(System.get_env("PORT") || "4000")
-    ],
-    secret_key_base: secret_key_base
+  server: true,
+  url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 443, scheme: "https"],
+  http: [
+    ip: {0, 0, 0, 0},
+    port: String.to_integer(System.get_env("PORT") || "4000")
+  ],
+  check_origin: [
+    "https://" <> System.get_env("APP_NAME") <> ".gigalixirapp.com",
+    "//*.gigalixirapp.com"
+  ],
+  secret_key_base: secret_key_base
 
   config :sample_app, SampleApp.Mailer,
   adapter: Swoosh.Adapters.Mailjet,
