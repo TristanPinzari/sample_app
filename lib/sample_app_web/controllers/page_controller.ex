@@ -1,10 +1,15 @@
 defmodule SampleAppWeb.PageController do
   use SampleAppWeb, :controller
 
-  def home(conn, _params) do
+  plug SampleAppWeb.MicropostPlug when action in [:home]
+  alias SampleApp.Posts
+
+  def home(conn, params) do
+    page_data = SampleAppWeb.HelperFunctions.params_to_page_data(params)
+
     conn
     |> assign(:page_title, "Home")
-    |> render(:home)
+    |> render(:home, changeset: Posts.change_micropost(%Posts.Micropost{}), posts: page_data.posts, page: page_data.current_page, total_pages: page_data.total_pages)
   end
 
   def help(conn, _params) do

@@ -2,43 +2,42 @@
 <html>
   <head>
     <title>Email Preview</title>
-    
+
     <link
       rel="stylesheet"
       href={~p"/assets/app.css"}
     />
   </head>
-  
+
   <body>
     <div class="container">
       <table>
         <tr>
           <td class="text-end"><strong>From:</strong></td>
-          
+
           <td>{@from}</td>
         </tr>
-        
+
         <tr>
           <td class="text-end"><strong>To:</strong></td>
-          
+
           <td>{@to}</td>
         </tr>
-        
+
         <tr>
           <td class="text-end"><strong>Subject:</strong></td>
-          
+
           <td>{@email.subject}</td>
         </tr>
       </table>
     </div>
-     <br />
+    <br />
     <div class="container">
       <h4>HTML body:</h4>
-      
       <div class="border">{raw(@email.html_body)}</div>
-       <br />
+      <br />
       <h4>Text body:</h4>
-       <pre class="border">
+      <pre class="border">
         <%= raw @email.text_body %>
       </pre>
     </div>

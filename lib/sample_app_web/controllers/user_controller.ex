@@ -40,11 +40,13 @@ defmodule SampleAppWeb.UserController do
   end
 
   def show(conn, %{"id" => id}) do
-    user = Accounts.get_user!(id)
+    user_with_microposts =
+      Accounts.get_user!(id)
+      |> Accounts.preload_microposts_recent_as_top()
 
     conn
-    |> assign(:page_title, user.name)
-    |> render(:show, user: user)
+    |> assign(:page_title, user_with_microposts.name)
+    |> render(:show, user: user_with_microposts)
   end
 
   def edit(conn, %{"id" => id}) do

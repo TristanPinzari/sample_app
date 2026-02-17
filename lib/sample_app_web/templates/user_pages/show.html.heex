@@ -1,12 +1,28 @@
 <div class="min-h-screen flex flex-col">
   <div class="min-h-screen flex flex-col">
     <.nav login={true} current_user={@current_user} />
-    <div class="flex flex-col flex-1 items-center gap-7 mt-10">
-      <.gravatar user={@user} />
-      <h1 class="text-2xl">{@user.name}</h1>
-      <%= if @current_user && @current_user.email == @user.email do %>
-        <.link href={~p"/users/#{@current_user.id}/edit"} class="link">Edit profile</.link>
-      <% end %>
+    <div class="p-10 flex gap-10 justify-center flex-1">
+      <div class="flex flex-col flex-1 items-center gap-7 mt-20">
+        <.gravatar user={@user} />
+        <h1 class="text-2xl">{@user.name}</h1>
+        <p>Joined on {@user.inserted_at}</p>
+        <p>Has made {length(@user.microposts)} posts</p>
+        <%= if @current_user && @current_user.email == @user.email do %>
+          <.link href={~p"/users/#{@current_user.id}/edit"} class="link">Edit profile</.link>
+        <% end %>
+      </div>
+      <div class="flex-1">
+        <h1 class="text-3xl font-bold tracking-tight mb-5">Posts</h1>
+        <div class="max-h-130 overflow-y-auto flex flex-col">
+          <%= if Enum.empty?(@user.microposts) do %>
+            <p>{"#{@user.name} hasn't made any posts yet."}</p>
+          <% else %>
+            <%= for micropost <- @user.microposts do %>
+              <.micropost micropost={micropost} user={@current_user} />
+            <% end %>
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
 </div>

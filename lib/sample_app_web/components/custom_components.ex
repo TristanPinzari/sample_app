@@ -57,8 +57,46 @@ defmodule SampleAppWeb.CustomComponents do
     <img
       src={@url}
       alt={@user.name}
-      class="rounded-full shadow-sm"
+      class="rounded-full shadow-sm w-fit h-fit"
     />
+    """
+  end
+
+  defp time_to_words(insertion_time) do
+    insertion_date_time = Timex.to_datetime(insertion_time)
+
+    diff_in_minutes =
+      Timex.diff(
+        Timex.now(),
+        insertion_date_time,
+        :minutes
+      )
+
+    {:ok, diff_in_minutes_words} =
+      Timex.shift(
+        insertion_date_time,
+        minutes: -diff_in_minutes
+      )
+      |> Timex.format("{relative}", :relative)
+
+    diff_in_minutes_words
+  end
+
+  def micropost(assigns) do
+    IO.inspect(assigns)
+    time_stamp = time_to_words(assigns.micropost.inserted_at)
+    user = assigns[:user] || assigns.micropost.user
+    assigns = assign(assigns, time_stamp: time_stamp, user: user)
+
+    ~H"""
+    <div class="border-t py-3 flex items-center gap-5">
+      <.gravatar user={@user} size={75} />
+      <div class="flex flex-col gap-2 flex-1">
+        <p>{@user.name}</p>
+        <p>{assigns.micropost.content}</p>
+        <p class="text-white/50">{@time_stamp}</p>
+      </div>
+    </div>
     """
   end
 end

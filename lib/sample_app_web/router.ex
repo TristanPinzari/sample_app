@@ -32,6 +32,10 @@ defmodule SampleAppWeb.Router do
     resources "/account_activations", AccountActivationController, only: [:edit]
     resources "/password_resets", PasswordResetController, only: [:new, :create, :edit, :update]
 
+    scope "/users/:user_id" do
+      resources "/microposts", MicropostController, only: [:index, :create, :delete]
+    end
+
     if Mix.env() == :dev do
       get "/preview_emails/:type", PreviewEmailController, :show
     end

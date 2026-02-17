@@ -40,6 +40,7 @@ defmodule SampleApp.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:timex, "3.7.6"},
       {:finch, "~> 0.17"},
       {:faker, "0.17.0"},
       {:pbkdf2_elixir, "~> 2.0"},

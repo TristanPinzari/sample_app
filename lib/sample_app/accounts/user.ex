@@ -1,6 +1,7 @@
 defmodule SampleApp.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
+  alias SampleApp.Posts.Micropost
 
   @valid_email_regex ~r/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   @required_fields [:name, :email, :password, :password_confirmation]
@@ -16,6 +17,8 @@ defmodule SampleApp.Accounts.User do
     timestamps(type: :utc_datetime)
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
+
+    has_many :microposts, Micropost, on_delete: :delete_all
   end
 
   @doc false

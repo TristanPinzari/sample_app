@@ -7,6 +7,7 @@ defmodule SampleApp.Accounts do
   alias SampleApp.Repo
   alias SampleApp.Accounts.User
   alias SampleApp.{Mailer, Email}
+  alias SampleApp.Posts.Micropost
 
   @doc """
   Returns the list of users.
@@ -202,5 +203,13 @@ defmodule SampleApp.Accounts do
     user
     |> User.password_changeset(attrs)
     |> Repo.update()
+  end
+
+  def preload_microposts_recent_as_top(user) do
+    Repo.preload(user, microposts: Micropost |> order_by(desc: :id))
+  end
+
+  def preload_microposts(user) do
+    Repo.preload(user, :microposts)
   end
 end
