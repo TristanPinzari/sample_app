@@ -34,19 +34,17 @@ defmodule SampleAppWeb.MicropostController do
     end
   end
 
-  def delete(conn, %{"id" => post_id}) do
-    post = Posts.get_micropost!(post_id)
+  def delete(conn, %{"id" => id}) do
+  conn =
+    case Posts.delete_micropost(%{micropost_id: id, user_id: conn.assigns.current_user.id}) do
+      {:ok, _} ->
+        put_flash(conn, :info, "Micropost deleted!")
 
-    conn =
-      case Posts.delete_micropost(post) do
-        {:ok, _} ->
-          put_flash(conn, :info, "Post deleted")
+      {:error, _} ->
+        put_flash(conn, :error, "Something went wrong!")
+    end
 
-        _ ->
-          put_flash(conn, :error, "Post not deleted. Something went wrong")
-      end
-
-    redirect(conn, to: ~p"/")
+    redirect(conn, external: get_last_url(conn) || ~p"/")
   end
 
   def correct_post_owner(conn, _opts) do

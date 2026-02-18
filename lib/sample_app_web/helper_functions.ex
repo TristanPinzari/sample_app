@@ -18,4 +18,10 @@ defmodule SampleAppWeb.HelperFunctions do
       total_pages: total_pages
     }
   end
+
+  def get_last_url(conn) do
+    conn
+    |> Plug.Conn.get_req_header("referer")
+    |> List.first()
+  end
 end

@@ -44,6 +44,7 @@ defmodule SampleAppWeb do
 
       import Plug.Conn
       import SampleAppWeb.AuthPlug, only: [logged_in_user: 2, correct_user: 2, is_admin: 2]
+      import SampleAppWeb.HelperFunctions
 
       unquote(verified_routes())
     end
