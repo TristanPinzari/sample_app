@@ -2,10 +2,14 @@ defmodule SampleAppWeb.PageController do
   use SampleAppWeb, :controller
 
   plug SampleAppWeb.MicropostPlug when action in [:home]
+  plug SampleAppWeb.RelationshipPlug when action in [:home]
   alias SampleApp.Posts
 
   def home(conn, params) do
-    page_data = SampleAppWeb.HelperFunctions.params_to_page_data(params)
+    page_data =
+      SampleAppWeb.HelperFunctions.params_to_page_data(
+        Map.put(params, :user, conn.assigns[:current_user])
+      )
 
     conn
     |> assign(:page_title, "Home")

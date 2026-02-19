@@ -2,7 +2,7 @@
   <div class="min-h-screen flex flex-col">
     <%= if @current_user do %>
       <.nav login={false} current_user={@current_user} />
-      <div class="p-10 flex gap-10 justify-center flex-1">
+      <div class="p-10 pt-5 flex gap-10 justify-center flex-1">
         <div class="flex flex-col flex-1 items-center gap-7 mt-20">
           <div class="flex gap-5 items-center">
             <.link href={~p"/users/#{@current_user.id}"}>
@@ -10,7 +10,9 @@
             </.link>
             <div class="flex flex-col">
               <h1 class="text-2xl">{@current_user.name}</h1>
-              <p>Posts: {length(@current_user.microposts)}</p>
+              <p>
+                Posts: {length(@current_user.microposts)} | Following: {@following_count} | Follwers: {@follower_count}
+              </p>
             </div>
           </div>
           <.form
@@ -37,7 +39,7 @@
         </div>
         <div class="flex-1">
           <div class="flex gap-4 items-center mb-5">
-            <h1 class="text-3xl font-bold tracking-tight">Posts</h1>
+            <h1 class="text-3xl font-bold tracking-tight">Feed</h1>
             <.link :if={@page > 1} navigate={~p"/home?page=#{@page - 1}"} class="underline">
               Previous
             </.link>

@@ -1,7 +1,7 @@
 <div class="min-h-screen flex flex-col">
   <div class="min-h-screen flex flex-col">
     <.nav login={true} current_user={@current_user} />
-    <div class="flex flex-col flex-1 items-center gap-7 mt-5">
+    <div class="flex flex-col flex-1 items-center gap-7">
       <h1 class="text-4xl font-semibold">All users</h1>
       <div class="flex gap-4">
         <.link :if={@page > 1} navigate={~p"/users?page=#{@page - 1}"} class="underline">
@@ -19,23 +19,7 @@
 
       <ul class="w-200">
         <%= for user <- @users do %>
-          <li class="flex items-center gap-3 border-t border-t-white/25 py-4">
-            <.gravatar user={user} size={100} />
-            <.link href={~p"/users/#{user.id}"}>{user.name}</.link>
-            <%= if @current_user.admin do %>
-              <%= if @current_user.admin && @current_user.id != user.id do %>
-                |
-                <.link
-                  href={~p"/users/#{user.id}"}
-                  method="delete"
-                  data-confirm="Are you sure?"
-                  class="text-red-600 hover:underline"
-                >
-                  delete user
-                </.link>
-              <% end %>
-            <% end %>
-          </li>
+          <.user user={user} current_user={@current_user} admin={true} />
         <% end %>
       </ul>
       <div class="flex gap-4 mb-20">

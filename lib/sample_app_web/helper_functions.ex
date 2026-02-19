@@ -3,8 +3,14 @@ defmodule SampleAppWeb.HelperFunctions do
 
   def params_to_page_data(params \\ %{}) do
     posts =
-      Posts.list_microposts(params)
-      |> SampleApp.Repo.preload([:user])
+      case params do
+        %{user: user} when not is_nil(user) ->
+          SampleApp.Relationships.microposts_for_feed(user)
+
+        _else ->
+          Posts.list_microposts(params)
+          |> SampleApp.Repo.preload([:user])
+      end
 
     total_count = Posts.count_microposts()
 

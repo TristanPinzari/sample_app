@@ -50,14 +50,21 @@ defmodule SampleAppWeb.CustomComponents do
       |> then(&:crypto.hash(:md5, &1))
       |> Base.encode16(case: :lower)
 
-    url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=#{size}"
+    url =
+      if assigns.user.avatar do
+        SampleApp.Avatar.url({assigns.user.avatar, assigns.user})
+      else
+        "https://secure.gravatar.com/avatar/#{gravatar_id}?s=#{size}"
+      end
+
     assigns = assign(assigns, url: url, size: size)
 
     ~H"""
     <img
       src={@url}
       alt={@user.name}
-      class="rounded-full shadow-sm w-fit h-fit"
+      class="rounded-full shadow-sm object-cover"
+      style={"width: #{@size}px; height: #{@size}px;"}
     />
     """
   end
@@ -92,10 +99,10 @@ defmodule SampleAppWeb.CustomComponents do
 
     ~H"""
     <div class="border-t py-3 flex flex-col gap-3">
-      <div class="flex items-center gap-5">
+      <.link href={~p"/users/#{@user.id}"} class="flex items-center gap-5">
         <.gravatar user={@user} size={50} />
         <p>{@user.name}</p>
-      </div>
+      </.link>
       <div class="flex flex-col gap-2 flex-1 ml-15 pl-3 border-l">
         <p>{@micropost.content}</p>
         <%= if @micropost.image do %>
@@ -121,6 +128,43 @@ defmodule SampleAppWeb.CustomComponents do
           </.link>
         <% end %>
       </div>
+    </div>
+    """
+  end
+
+  def user(assigns) do
+    micropost_count = SampleApp.Posts.count_user_microposts(assigns.user.id)
+    following_count = SampleApp.Relationships.follower_count(assigns.user)
+    follower_count = SampleApp.Relationships.following_count(assigns.user)
+
+    assigns =
+      assign(assigns, %{
+        micropost_count: micropost_count,
+        following_count: following_count,
+        follower_count: follower_count
+      })
+
+    ~H"""
+    <div class="flex items-center gap-3 border-t border-t-white/25 py-4 justify-between">
+      <.link href={~p"/users/#{@user.id}"} class="flex items-center gap-5">
+        <.gravatar user={@user} size={75} />
+        <div>
+          <p>{@user.name}</p>
+          <p>
+            Posts: {@micropost_count} | Following: {@following_count} | Followers: {@follower_count}
+          </p>
+        </div>
+      </.link>
+      <%= if @current_user.admin && @current_user.id != @user.id && assigns[:admin] do %>
+        <.link
+          href={~p"/users/#{@user.id}"}
+          method="delete"
+          data-confirm="Are you sure?"
+          class="text-red-600 hover:underline"
+        >
+          delete user
+        </.link>
+      <% end %>
     </div>
     """
   end

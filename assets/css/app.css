@@ -111,8 +111,12 @@ button {
   cursor: pointer;
 }
 
-.primary-gradient {
+.primary-gradient-text {
   @apply bg-linear-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent;
+}
+
+.primary-gradient {
+  @apply bg-linear-to-r from-orange-500 to-orange-600;
 }
 
 .link {

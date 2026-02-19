@@ -44,18 +44,10 @@
         <% end %>
       </div>
       <div class="flex-1">
-        <h1 class="text-3xl font-bold tracking-tight mb-5">Posts</h1>
+        <h1 class="text-3xl font-bold tracking-tight mb-5">Followers</h1>
         <div class="max-h-130 overflow-y-auto flex flex-col">
-          <%= if Enum.empty?(@user.microposts) do %>
-            <p>{"#{@user.name} hasn't made any posts yet."}</p>
-          <% else %>
-            <%= for micropost <- @user.microposts do %>
-              <.micropost
-                micropost={micropost}
-                user={@current_user}
-                current_user_id={@current_user.id}
-              />
-            <% end %>
+          <%= for follower <- @user.followers do %>
+            <.user user={follower} current_user={@current_user} />
           <% end %>
         </div>
       </div>

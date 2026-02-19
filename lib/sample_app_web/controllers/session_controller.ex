@@ -29,7 +29,7 @@ defmodule SampleAppWeb.SessionController do
             end
 
           conn
-          |> AuthPlug.redirect_back_or(~p"/users/#{user.id}")
+          |> AuthPlug.redirect_back_or(~p"/")
         else
           conn
           |> put_flash(:error, "Account not activated. Check your email.")

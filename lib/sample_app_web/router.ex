@@ -34,6 +34,13 @@ defmodule SampleAppWeb.Router do
 
     scope "/users/:user_id" do
       resources "/microposts", MicropostController, only: [:create, :delete]
+      get "/followers", UserController, :index_followers
+      get "/followings", UserController, :index_followings
+    end
+
+    scope "/users/:user_id" do
+      post "/relationships", RelationshipController, :create
+      delete "/relationships", RelationshipController, :delete
     end
 
     if Mix.env() == :dev do

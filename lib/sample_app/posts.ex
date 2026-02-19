@@ -34,6 +34,12 @@ defmodule SampleApp.Posts do
     Repo.aggregate(Micropost, :count, :id)
   end
 
+  def count_user_microposts(user_id) do
+    Micropost
+    |> where([m], m.user_id == ^user_id)
+    |> Repo.aggregate(:count, :id)
+  end
+
   @doc """
   Gets a single micropost.
 
@@ -70,8 +76,8 @@ defmodule SampleApp.Posts do
       Ecto.Multi.new()
       |> Ecto.Multi.insert(:micropost, base_changeset)
       |> Ecto.Multi.update(:micropost_with_image, fn %{micropost: post} ->
-          Micropost.image_changeset(post, attrs)
-        end)
+        Micropost.image_changeset(post, attrs)
+      end)
       |> Repo.transaction()
 
     case micropost_transaction do
@@ -139,6 +145,7 @@ defmodule SampleApp.Posts do
                 rescue
                   e ->
                     Repo.rollback(:error)
+
                     Logger.error(
                       "Failed to delete S3 file for post #{deleted_struct.id}: #{inspect(e)}"
                     )

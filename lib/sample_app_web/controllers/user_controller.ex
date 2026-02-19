@@ -6,6 +6,9 @@ defmodule SampleAppWeb.UserController do
   plug :correct_user when action in [:edit, :update]
   plug :is_admin when action in [:delete]
 
+  plug SampleAppWeb.RelationshipPlug
+       when action in [:index, :show, :index_followers, :index_followings]
+
   def index(conn, params) do
     users = Accounts.list_users(params)
     total_count = Accounts.count_users()
@@ -83,5 +86,21 @@ defmodule SampleAppWeb.UserController do
       |> put_flash(:error, "User does not exist")
       |> redirect(to: ~p"/users")
     end
+  end
+
+  def index_followers(conn, %{"user_id" => user_id}) do
+    user =
+      Accounts.get_user!(user_id)
+      |> SampleApp.Repo.preload(:followers)
+
+    render(conn, :followers, user: user)
+  end
+
+  def index_followings(conn, %{"user_id" => user_id}) do
+    user =
+      Accounts.get_user!(user_id)
+      |> SampleApp.Repo.preload(:followings)
+
+    render(conn, :followings, user: user)
   end
 end

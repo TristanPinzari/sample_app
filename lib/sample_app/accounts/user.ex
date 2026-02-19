@@ -1,7 +1,9 @@
 defmodule SampleApp.Accounts.User do
   use Ecto.Schema
+  use Waffle.Ecto.Schema
   import Ecto.Changeset
   alias SampleApp.Posts.Micropost
+  alias SampleApp.Accounts.Relationship
 
   @valid_email_regex ~r/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   @required_fields [:name, :email, :password, :password_confirmation]
@@ -17,8 +19,20 @@ defmodule SampleApp.Accounts.User do
     timestamps(type: :utc_datetime)
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
+    field :avatar, SampleApp.Avatar.Type
 
     has_many :microposts, Micropost, on_delete: :delete_all
+
+    has_many :active_relationships, Relationship,
+      foreign_key: :follower_id,
+      on_delete: :delete_all
+
+    has_many :passive_relationships, Relationship,
+      foreign_key: :followed_id,
+      on_delete: :delete_all
+
+    has_many :followings, through: [:active_relationships, :followed]
+    has_many :followers, through: [:passive_relationships, :follower]
   end
 
   @doc false
@@ -45,8 +59,11 @@ defmodule SampleApp.Accounts.User do
   end
 
   def identity_changeset(user, attrs) do
+    IO.inspect(attrs, label: "'_----------------------------------'")
+
     user
     |> cast(attrs, @identity_changeset_fields)
+    |> cast_attachments(attrs, [:avatar])
     |> validate_required(@identity_changeset_fields, message: "This field is required.")
     |> validate_length(:name,
       min: 3,
